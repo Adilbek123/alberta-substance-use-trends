@@ -41,9 +41,9 @@ population growth over the 10-year window (Alberta grew ~4.4M → 4.9M).
 rate_t  =  α  +  β1·(t − cutoff)  +  β2·post  +  β3·(t − cutoff)·post  +  γ·Quarter_FE  +  ε
 ```
 
-- `cutoff = 2020 Q2` — first full quarter under Alberta's public health
+- `cutoff = 2020 Q2` - first full quarter under Alberta's public health
   emergency (declared 2020-03-17).
-- `Quarter_FE` — quarter-of-year dummies (Q4 reference) to absorb
+- `Quarter_FE` - quarter-of-year dummies (Q4 reference) to absorb
   seasonality.
 - Newey-West HAC standard errors with small-sample correction; 3-lag is
   the data-driven choice for quarterly data with this T, sensitivity at
@@ -103,7 +103,7 @@ i.e. the post-cutoff rate is roughly 2.4× the pre-cutoff rate at the cutoff.
 This is consistent with the linear-rate result and confirms the conclusion
 does not depend on the OLS/Gaussian assumption.
 
-## What this identifies — and what it doesn't
+## What this identifies - and what it doesn't
 
 **What the estimate captures:** the **total effect of the COVID-19
 pandemic** on Alberta opioid mortality, including the bundle of social and
@@ -125,7 +125,7 @@ provinces faced COVID and its policy response at essentially the same time
 (emergencies declared within days of each other in March 2020). A
 difference-in-discontinuities or synthetic-control design comparing
 Alberta to BC or Ontario would identify Alberta-specific deviation from
-the common pandemic pattern, not a clean "COVID-only" effect — because no
+the common pandemic pattern, not a clean "COVID-only" effect - because no
 province offers a counterfactual without COVID and its policy response.
 
 ## Other limitations

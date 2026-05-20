@@ -18,16 +18,16 @@ def code(text):
 
 # ---------------------------------------------------------------------------
 md(
-    """# Alberta opioid mortality around COVID-19 — walkthrough notebook
+    """# Alberta opioid mortality around COVID-19 - walkthrough notebook
 
 This notebook is a step-by-step version of the analysis in `analysis.py`. It exists so I can
 read it later, understand each decision, and defend it at an interview.
 
 Each section has the same structure:
 
-1. **What we're doing** — plain English
-2. **Why** — the decision and the alternatives I rejected
-3. **Code** — the actual step
+1. **What we're doing** - plain English
+2. **Why** - the decision and the alternatives I rejected
+3. **Code** - the actual step
 4. **What to look at in the output**
 
 The data files live in `data/`. To run this notebook end-to-end:
@@ -44,7 +44,7 @@ jupyter notebook walkthrough.ipynb
 > Did Alberta's opioid death rate shift at a level higher than the pre-COVID trend can explain,
 > starting from 2020 Q2 (first full quarter under Alberta's public health emergency)?
 
-This is a *descriptive break* question — "did something change at this point in time, and how much?" —
+This is a *descriptive break* question - "did something change at this point in time, and how much?" -
 not a *causal mechanism* question like "what specifically caused the change?". That distinction
 matters for how we interpret the result, and we'll come back to it at the end.
 """
@@ -113,7 +113,7 @@ deaths by population to get a rate per 100k.
 ### Why
 Alberta grew from about 4.4M to 4.9M residents over the sample period (~12% growth). If we
 model raw counts, some of the post-cutoff "level shift" is mechanically the denominator
-getting bigger. Converting to a rate per 100k nets that out — we're asking about how
+getting bigger. Converting to a rate per 100k nets that out - we're asking about how
 mortality risk per person changed, not how many more people there are to die.
 
 This is a small fix but a reviewer with econometric training will catch it within 60 seconds
@@ -196,7 +196,7 @@ where $t^* = 2020.25$ (2020 Q2) and $\\text{post}_t = 1$ if $t \\geq t^*$ else 0
 
 - $\\alpha$ = average pre-period level at the cutoff (Q4, the reference quarter).
 - $\\beta_1$ = pre-period slope.
-- $\\beta_2$ = **level shift at the cutoff** — this is the quantity of interest.
+- $\\beta_2$ = **level shift at the cutoff** - this is the quantity of interest.
 - $\\beta_3$ = change in slope from pre to post.
 - Quarter FEs = three dummies (Q1, Q2, Q3) to absorb seasonality. Q4 is the reference.
 
@@ -215,7 +215,7 @@ where $t^* = 2020.25$ (2020 Q2) and $\\text{post}_t = 1$ if $t \\geq t^*$ else 0
 ### What to look at
 - `centered_t` is 0 at the cutoff and ranges roughly −4.25 to +5.5.
 - `post` is 0 then 1 starting at 2020 Q2.
-- `centered_t_post` is the interaction — 0 for pre-period rows, then equals `centered_t` for
+- `centered_t_post` is the interaction - 0 for pre-period rows, then equals `centered_t` for
   post-period rows.
 """
 )
@@ -239,7 +239,7 @@ OLS with HAC (Newey-West) standard errors with small-sample correction. 3-lag is
 data-driven Newey-West choice for quarterly data with n = 39.
 
 ### Why HAC
-Quarterly time-series data has autocorrelated errors — a high-mortality quarter usually
+Quarterly time-series data has autocorrelated errors - a high-mortality quarter usually
 follows another high-mortality quarter. Plain OLS standard errors would be too small.
 HAC fixes both autocorrelation and any heteroskedasticity.
 
@@ -249,9 +249,9 @@ factor to the variance estimate. Without it, the CIs would be a hair too tight.
 
 ### What to look at
 - **`post` coefficient** = the level shift at 2020 Q2 in deaths per 100k per quarter.
-- **p-value for `post`** — if this is small, the level shift is real, not noise.
+- **p-value for `post`** - if this is small, the level shift is real, not noise.
 - **`centered_t` coefficient** = pre-period slope. If close to 0 and not significant, the
-  pre-period is flat (good — it means the jump isn't part of an existing trend).
+  pre-period is flat (good - it means the jump isn't part of an existing trend).
 - **`centered_t_post`** = change in slope. If significant, the post-period rises or falls
   at a different rate than the pre-period.
 """
@@ -272,7 +272,7 @@ md(
 - `post` should come in around **+5.50** with a 95% CI that does not include zero. That's the
   headline number: at the 2020 Q2 cutoff, Alberta's opioid death rate jumped by about 5.5 per
   100k per quarter, holding seasonality and trend constant.
-- `centered_t` (pre-period slope) should be tiny and non-significant — confirming a flat
+- `centered_t` (pre-period slope) should be tiny and non-significant - confirming a flat
   baseline.
 - The quarter dummies (`C(q)[T.2]` etc.) absorb seasonality. They might or might not be
   individually significant; what matters is they're there.
@@ -312,7 +312,7 @@ print(f"Post-COVID mean rate: {post_mean:.2f} per 100k/quarter")"""
 
 # ---------------------------------------------------------------------------
 md(
-    """## 7. Robustness check 1 — HAC lag sensitivity
+    """## 7. Robustness check 1 - HAC lag sensitivity
 
 ### What we're doing
 Refit the same model with different HAC lag lengths (1, 2, 3, 4, 6 quarters) and see if the
@@ -347,14 +347,14 @@ md(
     """**Reading the table:**
 
 The point estimate is identical (+5.50) across all lags. The SE varies in a narrow band
-(0.79 – 0.98), which is exactly what we want — the estimate is the data, the SE is the
+(0.79 – 0.98), which is exactly what we want - the estimate is the data, the SE is the
 inference choice, and a robust result is one where the SE choice doesn't change the
 conclusion."""
 )
 
 # ---------------------------------------------------------------------------
 md(
-    """## 8. Robustness check 2 — donut
+    """## 8. Robustness check 2 - donut
 
 ### What we're doing
 Drop the transitional quarter (2020 Q1) and refit. 2020 Q1 straddles the cutoff: the public
@@ -363,8 +363,8 @@ fortnight or two of COVID at the end.
 
 ### Why
 If the estimate is being driven by an odd value at the cutoff itself, dropping that quarter
-will move it noticeably. If the estimate is structural — coming from the persistent gap
-between pre and post — dropping one quarter won't matter much.
+will move it noticeably. If the estimate is structural - coming from the persistent gap
+between pre and post - dropping one quarter won't matter much.
 
 ### What to look at
 The new `post` coefficient. It should be within a couple of percent of +5.50."""
@@ -389,12 +389,12 @@ print(f"  jump: {main.params['post']:+.2f} "
 
 # ---------------------------------------------------------------------------
 md(
-    """## 9. Robustness check 3 — placebo cutoffs
+    """## 9. Robustness check 3 - placebo cutoffs
 
 ### What we're doing
 Pretend the cutoff was at some date in the *pre-period* (e.g. 2018 Q2, 2019 Q1) and re-fit
 using only pre-2020-Q2 data. A credible design should produce small, non-significant jumps
-at these fake cutoffs — there was no policy or supply shock then, so there's nothing for
+at these fake cutoffs - there was no policy or supply shock then, so there's nothing for
 the model to find.
 
 ### Why this is the strongest robustness check
@@ -406,7 +406,7 @@ credibly outside the noise distribution.
 ### What to look at
 - Each placebo estimate. They should be small in absolute value compared to +5.50.
 - The sign: in this case all placebos come back *negative*, meaning if we drew a fake cutoff
-  in 2018 or 2019, the model would say the rate slightly *fell* — the opposite direction of
+  in 2018 or 2019, the model would say the rate slightly *fell* - the opposite direction of
   the real estimate. That's even stronger evidence the real jump is not a fluke.
 """
 )
@@ -449,7 +449,7 @@ the same regressors.
 
 ### Why
 We've been treating the outcome as a continuous variable, but it's a count of deaths. Counts
-are not Gaussian — they're skewed and can't go below zero. Two questions:
+are not Gaussian - they're skewed and can't go below zero. Two questions:
 1. Does the OLS-on-rate result hold up under a model designed for counts?
 2. Can we express the result as a rate ratio (post period rate / pre period rate) for a
    reader who wants the multiplicative view?
@@ -476,7 +476,7 @@ print(f"  -> post-cutoff rate is {(rr - 1) * 100:+.1f}% relative to pre-cutoff")
 md(
     """**Reading the result:** A rate ratio of about 2.4 means the post-cutoff rate is roughly
 2.4× the pre-cutoff rate. That's a different way of saying the same thing as "+5.50 per 100k"
-— linear vs multiplicative — and it lets the reader pick whichever lens is easier to
+- linear vs multiplicative - and it lets the reader pick whichever lens is easier to
 communicate."""
 )
 
@@ -522,7 +522,7 @@ plt.show()"""
 
 # ---------------------------------------------------------------------------
 md(
-    """## 12. What we identified — and what we did not
+    """## 12. What we identified - and what we did not
 
 ### The honest framing
 
@@ -538,7 +538,7 @@ required:
 
 These are not parallel causes that coincidentally aligned with COVID. They are downstream
 consequences of COVID. A pandemic without those responses is not a counterfactual that
-exists in any data — pandemic necessitates policy response.
+exists in any data - pandemic necessitates policy response.
 
 ### What we cannot do
 Decompose that total into its component channels. We don't know what share of +5.50 came
@@ -549,7 +549,7 @@ service-utilisation series, etc.).
 ### Why a peer-province comparison would not help
 All provinces faced COVID and its policy response at essentially the same time. Comparing
 Alberta to BC or Ontario would identify *Alberta-specific deviation* from the common
-pandemic pattern, not a clean "COVID-only" channel. Synthetic control has the same problem —
+pandemic pattern, not a clean "COVID-only" channel. Synthetic control has the same problem -
 you can't build a counterfactual Alberta without COVID from a donor pool of provinces that
 also had COVID.
 
@@ -562,7 +562,7 @@ question** that requires more work.
 ### Realistic next steps
 1. Mechanism decomposition: triangulate supply-side, service-capacity, and outcome signals
    to attribute share.
-2. Heterogeneity: by age, sex, zone, substance type — where did the level shift concentrate?
+2. Heterogeneity: by age, sex, zone, substance type - where did the level shift concentrate?
 3. Post-period dynamics: peak in 2021 Q4, decline since 2024. Model the rise-and-decline
    shape directly rather than a single level shift.
 4. Cumulative excess deaths through end of sample as a policy-relevant quantity.

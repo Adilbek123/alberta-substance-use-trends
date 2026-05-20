@@ -133,7 +133,7 @@ print(f"\nPre-COVID  mean rate (2016 Q1 – 2020 Q1): {pre_mean:.2f} per 100k pe
 print(f"Post-COVID mean rate (2020 Q2 onward):     {post_mean:.2f}")
 
 # ---------------------------------------------------------------------------
-# 4. Robustness — HAC lag sensitivity
+# 4. Robustness - HAC lag sensitivity
 # ---------------------------------------------------------------------------
 print("\n========== HAC lag sensitivity (rate spec) ==========")
 hac_table = []
@@ -146,7 +146,7 @@ for L in [1, 2, 3, 4, 6]:
     print(f"  maxlags={L}: jump={p:+.2f}, SE={se:.2f}, 95% CI [{lo:+.2f}, {hi:+.2f}], p={m.pvalues['post']:.4f}")
 
 # ---------------------------------------------------------------------------
-# 5. Robustness — donut (drop transitional 2020 Q1)
+# 5. Robustness - donut (drop transitional 2020 Q1)
 # ---------------------------------------------------------------------------
 ab_donut = ab[ab["Year_Quarter"] != "2020 Q1"].copy()
 donut = fit_seg(ab_donut, dv="rate", hac_lags=3)
@@ -156,7 +156,7 @@ print(f"  jump: {donut.params['post']:+.2f}  "
       f"{donut.conf_int().loc['post', 1]:+.2f}]")
 
 # ---------------------------------------------------------------------------
-# 6. Robustness — placebo cutoffs in the pre-period
+# 6. Robustness - placebo cutoffs in the pre-period
 #    Fit the same model on pre-cutoff data only, using a fake cutoff.
 #    A credible design should produce small / non-significant jumps here.
 # ---------------------------------------------------------------------------
@@ -207,7 +207,7 @@ fig, ax = plt.subplots(figsize=(9.5, 5.5))
 
 ax.scatter(ab["t"], ab["rate"], s=40, color="#2b2b2b", zorder=3, label="Observed quarter")
 
-# Predict at each observed point — model includes quarter FE so fitted values
+# Predict at each observed point - model includes quarter FE so fitted values
 # carry the seasonal pattern.
 ab["fit"] = main.predict(ab)
 
@@ -245,7 +245,7 @@ print(f"\nSaved chart: output/rdit_opioid_deaths.png")
 # 9. Save results
 # ---------------------------------------------------------------------------
 with open(os.path.join(OUT, "results.txt"), "w") as f:
-    f.write(f"Alberta opioid deaths — segmented regression / ITS results\n")
+    f.write(f"Alberta opioid deaths - segmented regression / ITS results\n")
     f.write(f"Run date: {date.today()}\n")
     f.write("=" * 64 + "\n\n")
     f.write(f"Sample: {len(ab)} quarters ({ab['Year_Quarter'].iloc[0]} – {ab['Year_Quarter'].iloc[-1]})\n")
