@@ -1,37 +1,41 @@
-# Alberta opioid deaths around COVID-19 — one-page brief
+# Alberta opioid mortality around the COVID-19 onset
 
-*Personal learning project, ~3 hours. Not affiliated with my employer.*
+**Adilbek Sultanov · independent project · May 2026**
 
-## The question
+## Headline
 
-Did Alberta's opioid death rate shift at a level higher than the pre-COVID trend can explain, starting from 2020 Q2 (the first full quarter under Alberta's public health emergency)?
+Alberta's opioid death rate roughly doubled when COVID-19 hit in 2020 Q2 — from about 4 to about 8 deaths per 100,000 residents per quarter — and stayed at the higher level for years. The shift is sharp, large, and survives every robustness check applied to it. The most honest reading is that the pandemic and the bundle of changes it brought together (supply, services, isolation, economic shock) shifted opioid mortality; the analysis cannot, and does not try to, separate the virus channel from everything else COVID-19 produced.
 
-## What I did
+## Background
 
-Pulled federal public data (PHAC Health Infobase substance-related harms data, downloaded 2026-05-20) on Alberta opioid deaths by quarter, 2016 Q1 to 2025 Q3. Normalised to a rate per 100,000 Alberta residents using Statistics Canada quarterly population estimates so the result is not driven by population growth.
+Before COVID-19, Alberta's opioid death rate had been flat for five years at roughly 4 per 100,000 per quarter. In March 2020 the province declared a public health emergency, and federal data shows opioid mortality rose sharply across Canada from that point. The Ministry of Mental Health and Addiction is now transforming Alberta's system to the Recovery Model. Understanding the size and shape of the post-COVID shift is a prerequisite for measuring progress against that baseline.
 
-Fit a segmented regression — interrupted time series with a level and slope change around 2020 Q2, quarter fixed effects to absorb seasonality, Newey-West HAC standard errors with small-sample correction.
+## Question
 
-Ran four robustness checks: HAC lag sensitivity (L = 1, 2, 3, 4, 6), a donut spec (drop transitional 2020 Q1), seven placebo cutoffs in the pre-period, and a negative binomial GLM cross-check with a log-population offset.
+Did Alberta's opioid death rate shift at a level higher than the pre-COVID trend can explain, starting from 2020 Q2 (the first full quarter under the public health emergency)?
 
-## What I found
+## Approach
 
-| | Pre-COVID (2016 Q1 – 2020 Q1) | Post-COVID (2020 Q2 onward) |
-| --- | --- | --- |
-| Mean deaths per 100k per quarter | 4.05 | 7.99 |
+This is an interrupted time series. The model fits one trend to the pre-COVID period and one to the post-COVID period, and measures the level gap between them at the cutoff. The outcome is a rate per 100,000 residents (to keep population growth from contaminating the result), with quarter-of-year adjustments to absorb seasonal patterns. Three robustness checks support the headline: placebo cutoffs placed in the pre-period (no jump found), dropping the transitional quarter (estimate unchanged), and a count-model cross-check (consistent rate-ratio result).
 
-The level shift at the cutoff is **+5.50 deaths per 100k per quarter** (95% CI +3.60, +7.39, p < 0.001). At mean Alberta population that is about +246 deaths per quarter. The negative binomial cross-check gives a rate ratio of 2.43 (95% CI 1.80, 3.26) — post-cutoff rate is roughly 2.4× the pre-cutoff rate.
+## Data
 
-Pre-period slope is flat (−0.02, p = 0.94), so the jump is not part of an existing trend. Donut robustness moves the estimate by less than 3%. All seven placebo cutoffs in the pre-period give jumps in the opposite direction with absolute values at most one third the real estimate.
+Two public sources. Quarterly opioid deaths in Alberta come from the Public Health Agency of Canada's Health Infobase, downloaded 20 May 2026 and covering 2016 Q1 through 2025 Q3. Population denominators come from Statistics Canada Table 17-10-0009-01. No internal Government of Alberta data is used.
 
-## What this identifies — and what it doesn't
+## Findings
 
-The estimate captures the **total effect of the COVID-19 pandemic** on Alberta opioid mortality — including the bundle of policy and social responses the pandemic produced (border closures and supply-chain disruption in the unregulated drug supply, reduced harm-reduction service capacity, mental-health service disruption, social isolation, the economic shock). These are downstream consequences of COVID, not parallel causes that happened to align. A pandemic without those responses is not a counterfactual that exists in any data.
+The level shift at the cutoff is about 5.5 deaths per 100,000 per quarter — roughly a doubling of the pre-COVID rate — with a 95 percent confidence interval of [3.6, 7.4] and a p-value well under 0.001. At Alberta's average population over the period that translates to roughly 240 additional deaths per quarter. The pre-COVID slope is flat, so the jump is not a continuation of an existing trend. The count-model cross-check returns a rate ratio of 2.4, meaning the post-COVID rate is about 2.4× the pre-COVID rate at the cutoff. Placebo cutoffs in 2018 and 2019 produce no comparable jump (largest about a third of the real estimate, in the opposite direction). Dropping the quarter that straddles the cutoff moves the estimate by less than 3 percent.
 
-What the design does not do is decompose that total into its component channels — what share came from supply toxicity, what from service capacity loss, what from isolation, what from the economic shock. That is a mechanism-level question that needs separate work.
+## What this identifies — and what it does not
 
-A peer-province comparison would not fix this. All provinces faced COVID and its policy response at essentially the same time, so comparing Alberta to BC or Ontario would identify Alberta-specific deviation from the common pandemic pattern, not a clean "COVID-only" channel.
+What the estimate captures is the **total effect of the COVID-19 pandemic on Alberta opioid mortality**, including supply chain disruption in the unregulated drug supply, reduced harm reduction service capacity, mental health service disruption, social isolation, and the economic shock. These are downstream consequences of the pandemic, not parallel causes that happened to align. A pandemic without those responses is not a counterfactual that exists in any data.
 
-The realistic next steps are mechanism decomposition (supply-side, service-capacity, and outcome signals triangulated), heterogeneity (age, sex, zone, substance type), explicit modelling of the rise-and-decline shape of the post-period, and cumulative excess deaths through end-of-sample.
+What the analysis does not do is decompose that total into its component channels. It cannot tell us what share came from supply toxicity versus service capacity versus isolation versus the economic shock. A peer-province comparison would not fix this, because every province faced COVID and its policy response at essentially the same time — the comparison would identify Alberta-specific deviation, not a clean "virus-only" channel.
 
-Repo: [github.com/Adilbek123/alberta-substance-use-trends](https://github.com/Adilbek123/alberta-substance-use-trends).
+## So what
+
+For the Ministry of Mental Health and Addiction, three things follow. First, the post-COVID baseline is materially different from the pre-COVID baseline, and any measure of progress under the Recovery Model needs to account for that. Second, the trajectory is not flat: the post-COVID period peaked in 2021 Q4 and has been declining since 2024, so a single average masks a real recovery already underway. Third, the realistic next analytical steps are decomposition (what share of the shift came from which channel) and heterogeneity (which age groups, zones, and substance types drove it) — not better identification of "COVID per se", which the data structure does not allow.
+
+## Reproducing
+
+Code, data, and full documentation are at [github.com/Adilbek123/alberta-substance-use-trends](https://github.com/Adilbek123/alberta-substance-use-trends). The walkthrough notebook (`walkthrough.ipynb`) reproduces each step with plain-language commentary on the decisions and trade-offs.
