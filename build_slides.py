@@ -133,32 +133,35 @@ add_para(tf, "Real jump (+5.50) is ~3× larger.", size=11, color=DARK)
 add_footer(s, 4, 3)
 
 # ===========================================================================
-# Slide 4 — What this is and isn't
+# Slide 4 — What this identifies and what it doesn't
 # ===========================================================================
 s = prs.slides.add_slide(blank)
 add_text(s, 0.6, 0.4, 12, 0.6,
          "What this identifies — and what it doesn't",
          size=26, bold=True, color=DARK)
 
-tf = add_text(s, 0.6, 1.4, 12, 0.4, "What we can claim", size=15, bold=True, color=BLUE)
-add_para(tf, "A sharp, large, robust break in Alberta opioid mortality at 2020 Q2.",
-         size=14, color=DARK)
-add_para(tf, "Pre-trend flat, placebos null, donut and NB cross-check consistent. "
-              "This is a real shift in the data, not an artefact of specification choices.",
-         size=13, color=GREY)
+tf = add_text(s, 0.6, 1.4, 12, 0.4, "What the estimate captures", size=15, bold=True, color=BLUE)
+add_para(tf, "The total effect of the COVID-19 pandemic on Alberta opioid mortality.",
+         size=14, bold=True, color=DARK)
+add_para(tf, "Including the bundle of policy and social responses the pandemic produced: supply-chain disruption "
+              "in the unregulated drug supply, reduced harm-reduction service capacity, mental-health service "
+              "disruption, social isolation, economic shock. These are downstream of COVID, not parallel causes.",
+         size=12, color=GREY)
 
-tf = add_text(s, 0.6, 3.1, 12, 0.4, "What we cannot claim", size=15, bold=True, color=RED)
-add_para(tf, "That COVID-19 itself caused the jump.",
-         size=14, color=DARK)
-add_para(tf, "Many things moved at the same cutoff: the virus, public health emergency response, "
-              "supply chain for the unregulated drug supply, harm reduction service capacity, mental health services, "
-              "social isolation, and economic shock. ITS with a single cutoff cannot separate them.",
-         size=13, color=GREY)
+tf = add_text(s, 0.6, 3.3, 12, 0.4, "What it does not do", size=15, bold=True, color=RED)
+add_para(tf, "Decompose that total into its component channels.",
+         size=14, bold=True, color=DARK)
+add_para(tf, "The estimate cannot tell you what share came from supply toxicity vs. service capacity vs. isolation "
+              "vs. economic shock. A peer-province comparison would not fix this — all provinces faced COVID and "
+              "its policy response at essentially the same time, so the comparison identifies Alberta-specific "
+              "deviation, not a clean COVID-only channel.",
+         size=12, color=GREY)
 
-tf = add_text(s, 0.6, 5.0, 12, 0.4, "Next steps to sharpen identification", size=15, bold=True, color=BLUE)
-add_para(tf, "1. Difference-in-discontinuities using other provinces with different pandemic-response timing", size=13, color=DARK)
-add_para(tf, "2. Synthetic control to build a counterfactual Alberta without COVID", size=13, color=DARK)
-add_para(tf, "3. Stratification by age, sex, zone, and substance type to localise where the shift concentrated", size=13, color=DARK)
+tf = add_text(s, 0.6, 5.4, 12, 0.4, "Realistic next steps", size=15, bold=True, color=BLUE)
+add_para(tf, "1. Mechanism decomposition: triangulate supply-side, service-capacity, and outcome signals to attribute share", size=12, color=DARK)
+add_para(tf, "2. Heterogeneity: by age, sex, zone, substance type — where the level shift concentrated", size=12, color=DARK)
+add_para(tf, "3. Post-period dynamics: explicitly model the rise-and-decline shape, not just the immediate level shift", size=12, color=DARK)
+add_para(tf, "4. Cumulative excess deaths through end-of-sample as a policy-relevant quantity", size=12, color=DARK)
 
 add_footer(s, 4, 4)
 

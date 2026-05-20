@@ -24,10 +24,14 @@ The level shift at the cutoff is **+5.50 deaths per 100k per quarter** (95% CI +
 
 Pre-period slope is flat (−0.02, p = 0.94), so the jump is not part of an existing trend. Donut robustness moves the estimate by less than 3%. All seven placebo cutoffs in the pre-period give jumps in the opposite direction with absolute values at most one third the real estimate.
 
-## What this is — and isn't
+## What this identifies — and what it doesn't
 
-The design identifies a sharp, large, robust break in the data at 2020 Q2. It does **not** identify COVID-19 as the cause. Several things shifted at that cutoff at the same time: the virus itself, public health emergency response, supply chain for the unregulated drug supply, harm reduction service capacity, mental health services, social isolation, and an economic shock. Any of these could explain part of the break.
+The estimate captures the **total effect of the COVID-19 pandemic** on Alberta opioid mortality — including the bundle of policy and social responses the pandemic produced (border closures and supply-chain disruption in the unregulated drug supply, reduced harm-reduction service capacity, mental-health service disruption, social isolation, the economic shock). These are downstream consequences of COVID, not parallel causes that happened to align. A pandemic without those responses is not a counterfactual that exists in any data.
 
-To net out COVID specifically from the policy-and-supply bundle, a difference-in-discontinuities using other provinces with different pandemic-response timing would be the next step. Stratification by age, sex, and zone, and a substance-type decomposition (fentanyl, carfentanil, other), would also sharpen the picture.
+What the design does not do is decompose that total into its component channels — what share came from supply toxicity, what from service capacity loss, what from isolation, what from the economic shock. That is a mechanism-level question that needs separate work.
+
+A peer-province comparison would not fix this. All provinces faced COVID and its policy response at essentially the same time, so comparing Alberta to BC or Ontario would identify Alberta-specific deviation from the common pandemic pattern, not a clean "COVID-only" channel.
+
+The realistic next steps are mechanism decomposition (supply-side, service-capacity, and outcome signals triangulated), heterogeneity (age, sex, zone, substance type), explicit modelling of the rise-and-decline shape of the post-period, and cumulative excess deaths through end-of-sample.
 
 Repo: [github.com/Adilbek123/alberta-substance-use-trends](https://github.com/Adilbek123/alberta-substance-use-trends).

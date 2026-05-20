@@ -103,26 +103,42 @@ i.e. the post-cutoff rate is roughly 2.4× the pre-cutoff rate at the cutoff.
 This is consistent with the linear-rate result and confirms the conclusion
 does not depend on the OLS/Gaussian assumption.
 
-## Limitations
+## What this identifies — and what it doesn't
 
-- **Not a causal identification of COVID-19 itself.** Many things shifted in
-  March 2020: supply chains for the unregulated drug supply, harm-reduction
-  service availability, employment, housing, and mental-health service
-  capacity. The estimate captures the bundled effect of "the world before
-  March 2020 vs after," not a clean COVID-only channel.
-- **Single province, no donor pool.** A stronger design would use other
-  provinces with different pandemic-response timing as comparators
-  (difference-in-discontinuities) or a synthetic control.
+**What the estimate captures:** the **total effect of the COVID-19
+pandemic** on Alberta opioid mortality, including the bundle of social and
+policy responses the pandemic required (border closures and supply chain
+disruption in the unregulated drug supply, reduced harm-reduction service
+capacity, mental-health service disruption, social isolation, and the
+economic shock). These are not parallel causes that happened to align with
+COVID; they are downstream consequences that came with the pandemic by
+construction. A pandemic without policy response is not a counterfactual
+that exists in any data.
+
+**What it does not do:** decompose that total effect into its component
+mechanisms. The estimate cannot tell you what share of the +5.50 per 100k
+came from supply toxicity vs. service capacity loss vs. isolation vs. the
+economic shock. That is a separate, mechanism-level question.
+
+**Why a peer-province comparison would not fix this.** All Canadian
+provinces faced COVID and its policy response at essentially the same time
+(emergencies declared within days of each other in March 2020). A
+difference-in-discontinuities or synthetic-control design comparing
+Alberta to BC or Ontario would identify Alberta-specific deviation from
+the common pandemic pattern, not a clean "COVID-only" effect — because no
+province offers a counterfactual without COVID and its policy response.
+
+## Other limitations
+
+- **Post-period is non-monotonic.** The post-cutoff series peaked in 2021 Q4
+  and has been declining since 2024. `β2` measures the immediate level shift
+  at the cutoff conditional on a linear post-trend; it is not the average
+  treatment effect over the full post-period.
 - **No demographic stratification.** Alberta-level totals mask substantial
   age, sex, and zone heterogeneity that any real Ministry analysis would
   surface.
 - **No substance decomposition.** The headline number bundles fentanyl,
-  carfentanil, and other opioids. A follow-up could separate composition
-  change in the unregulated supply from uptake of pharmaceutical opioids.
-- **Post-period is non-monotonic.** The post-cutoff series peaked in 2021 Q4
-  and has been declining since 2024. `β2` measures the immediate level shift
-  at the cutoff conditional on a linear post-trend; it is not the average
-  treatment effect over the post-period.
+  carfentanil, and other opioids in a single total.
 - **Reporting lag and revisions.** Health Infobase notes the data is subject
   to revision; the most recent quarters may move.
 - **Small sample for HAC asymptotics.** n = 39 is at the lower end of where
@@ -132,18 +148,24 @@ does not depend on the OLS/Gaussian assumption.
 
 ## What I would do next
 
-1. Add other provinces and run a difference-in-discontinuities to net out
-   the common COVID shock from the Alberta-specific level.
-2. Decompose the post-cutoff total into substance type (fentanyl /
-   carfentanil / other opioids) using the `Type of opioids` rows in the
-   same dataset.
-3. Add EMS responses and ED visits as parallel outcomes — these have
-   different reporting lag and different selection into the data, and
-   triangulating across them strengthens the inference.
-4. Stratify by age and sex to identify which cohorts drove the post-cutoff
-   level shift.
-5. Report cumulative excess deaths through end-of-sample as a policy-
-   relevant quantity alongside the immediate level shift.
+The total pandemic effect is identified; the natural follow-ups are
+mechanism-level and policy-relevant questions, not attempts at "sharper
+identification of COVID."
+
+1. **Mechanism decomposition.** Triangulate across supply-side signals
+   (drug-checking composition, fentanyl share), service-capacity signals
+   (supervised consumption hours, OAT dispensing), and outcome signals
+   (deaths, EMS, ED) to attribute share of the total to plausible channels.
+2. **Heterogeneity.** Stratify by age, sex, zone, and substance type to
+   identify where the level shift concentrated.
+3. **Post-period dynamics.** Model the rise-and-decline shape directly
+   (post-period peak in 2021 Q4, recovery beginning in 2024) rather than
+   collapsing it into a single level shift.
+4. **Cumulative excess deaths through end-of-sample.** A policy-relevant
+   quantity alongside the immediate level shift.
+5. **Substance composition over time.** Use the `Type of opioids` rows in
+   the same dataset to separate composition change in the unregulated
+   supply from broader uptake patterns.
 
 ## Reproducing
 
