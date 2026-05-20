@@ -4,7 +4,7 @@
 
 ## Background
 
-The COVID-19 pandemic was declared by the World Health Organization on 11 March 2020. Alberta declared a provincial public health emergency on 17 March 2020. Roughly 60,000 Canadians have died from the virus directly between 2020 and 2023. Beyond the virus itself, the pandemic disrupted several systems at once: drug supply chains for the unregulated drug market, harm reduction services such as supervised consumption sites, mental health and addiction service capacity, employment, housing, and social connection. Other Canadian provinces (British Columbia, Ontario, and others) reported a surge in opioid deaths starting in 2020.
+The World Health Organization characterized COVID-19 as a pandemic on 11 March 2020. Alberta declared a provincial public health emergency on 17 March 2020. Approximately 60,000 Canadians have died from the virus directly through 2024. Beyond the virus itself, the pandemic disrupted several systems at once: drug supply chains for the unregulated drug market, harm reduction service delivery, mental health and addiction service capacity, and employment, housing, and social connection. Other Canadian provinces reported substantial increases in opioid mortality starting 2020 Q2: federal data shows British Columbia roughly doubled and Ontario rose about 75 percent (2019 average compared with 2020 Q2 to 2021 Q1).
 
 ## Question
 

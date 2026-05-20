@@ -1,14 +1,18 @@
-"""Build a 7-slide deck as a policy briefing arc with sentence-style titles.
-Black and white, formal bullet structure, no jargon in bodies.
+"""Build a GoA-style briefing deck.
 
-Slide titles read as a storyline:
-  1. (Cover)
-  2. COVID-19 hit Alberta in March 2020, and many other things shifted at the same time
-  3. Did Alberta opioid mortality jump at the COVID onset, and is it real or noise?
-  4. An interrupted time series compares the pre-COVID and post-COVID periods statistically
-  5. The death rate roughly doubled at 2020 Q2, sharp, large, and robust
-  6. The pandemic as a whole shifted opioid mortality, not the virus alone
-  7. Post-COVID baseline is higher than pre-COVID, and recovery is already underway
+Format mirrors a Cabinet/MDM deck (section labels, not sentence headlines):
+  1. Cover
+  2. Issue
+  3. Purpose
+  4. Background
+  5. Approach
+  6. Findings
+  7. What This Means
+  8. Limitations and Next Steps
+
+Black and white, bullet structure, no jargon in bodies. Every external fact
+that is verifiable has been verified; claims that could not be verified have
+been removed or softened.
 """
 import os
 from pptx import Presentation
@@ -33,19 +37,18 @@ FONT = "Calibri"
 
 
 def title(slide, text):
-    tb = slide.shapes.add_textbox(Inches(0.6), Inches(0.35), Inches(12.1), Inches(1.1))
+    tb = slide.shapes.add_textbox(Inches(0.6), Inches(0.35), Inches(12.1), Inches(0.7))
     tf = tb.text_frame
-    tf.word_wrap = True
     p = tf.paragraphs[0]
     r = p.add_run()
     r.text = text
-    r.font.size = Pt(22)
+    r.font.size = Pt(26)
     r.font.bold = True
     r.font.name = FONT
     r.font.color.rgb = BLACK
 
 
-def hline(slide, y=1.45):
+def hline(slide, y=1.05):
     line = slide.shapes.add_connector(1, Inches(0.6), Inches(y), Inches(12.7), Inches(y))
     line.line.color.rgb = BLACK
     line.line.width = Pt(0.75)
@@ -118,7 +121,7 @@ tb = s.shapes.add_textbox(Inches(0.8), Inches(2.6), Inches(11.7), Inches(1.2))
 tf = tb.text_frame
 p = tf.paragraphs[0]
 r = p.add_run()
-r.text = "Alberta opioid mortality around the COVID-19 onset"
+r.text = "Alberta Opioid Mortality Around the COVID-19 Onset"
 r.font.size = Pt(34)
 r.font.bold = True
 r.font.name = FONT
@@ -128,7 +131,7 @@ tb = s.shapes.add_textbox(Inches(0.8), Inches(3.8), Inches(11.7), Inches(0.5))
 tf = tb.text_frame
 p = tf.paragraphs[0]
 r = p.add_run()
-r.text = "An interrupted time series analysis using federal data"
+r.text = "Interrupted Time Series Analysis Using Federal Data"
 r.font.size = Pt(18)
 r.font.name = FONT
 r.font.color.rgb = GREY
@@ -153,98 +156,115 @@ for line, size, color in [
 page_num(s, 1)
 
 # ===========================================================================
-# Slide 2 - Background
-#   "COVID-19 hit Alberta in March 2020, and many other things shifted at the same time"
+# Slide 2 - Issue
 # ===========================================================================
 s = prs.slides.add_slide(blank)
-title(s, "COVID-19 hit Alberta in March 2020, and many other things shifted at the same time")
+title(s, "Issue")
 hline(s)
 
-bullets(s, 0.7, 1.7, 12, 5.0, [
-    ("COVID-19 was declared a pandemic by the WHO on 11 March 2020",
-     ["Alberta declared a public health emergency on 17 March 2020",
-      "Roughly 60,000 Canadians have died from COVID-19 directly between 2020 and 2023"]),
-    ("Beyond the virus itself, the pandemic disrupted multiple systems at once",
-     ["Drug supply chains for the unregulated drug market",
-      "Harm reduction services (e.g., supervised consumption sites operating at reduced capacity)",
-      "Mental health and addiction services (in-person care disruption, telehealth ramp-up lag)",
-      "Employment, housing, and social connection"]),
-    ("Other provinces reported a surge in opioid deaths from 2020 onward",
-     ["British Columbia, Ontario, and others saw sharp increases at roughly the same time",
-      "Alberta's pattern has not been quantified at this granularity in public analysis"]),
-], size=14, sub_size=12)
+bullets(s, 0.7, 1.5, 12, 5.0, [
+    ("Opioid mortality in Alberta has risen sharply since the start of the COVID-19 pandemic, but the size and timing of the shift have not been quantified for this analysis at quarterly resolution.",
+     []),
+    ("Without a defensible measurement of the post-COVID baseline, performance under the Alberta Recovery Model cannot be evaluated against a meaningful counterfactual.",
+     []),
+    ("This analysis quantifies the level shift at the COVID onset using publicly available federal data, and tests whether the shift is statistically meaningful or could be explained by random variation in a noisy series.",
+     []),
+], size=16, sub_size=12)
 
 footer_left(s, FOOTER)
 page_num(s, 2)
 
 # ===========================================================================
-# Slide 3 - The Question
-#   "Did Alberta opioid mortality jump at the COVID onset, and is it real or noise?"
+# Slide 3 - Purpose
 # ===========================================================================
 s = prs.slides.add_slide(blank)
-title(s, "Did Alberta opioid mortality jump at the COVID onset, and is it real or noise?")
+title(s, "Purpose")
 hline(s)
 
-bullets(s, 0.7, 1.7, 12, 5.0, [
-    ("Pre-COVID context",
-     ["Alberta opioid death rate sat around 4 per 100,000 residents per quarter, 2016 through early 2020",
-      "Flat trend across that period, no sustained rise or fall"]),
-    ("If a jump occurred at COVID, two things matter for policy",
-     ["How large was it? This sets the post-COVID baseline against which Recovery Model progress will be measured",
-      "Is it real, or could random variation in a noisy series explain it? This determines whether the change calls for action"]),
-    ("This analysis answers both questions",
-     ["Whether the level shift exists at the cutoff, separately from the existing trend",
-      "Whether the size of the shift is meaningfully larger than what random variation could produce"]),
-], size=14, sub_size=12)
+bullets(s, 0.7, 1.5, 12, 5.0, [
+    ("Establish whether Alberta's opioid death rate shifted at the COVID-19 onset",
+     ["Identify the size of the shift, if any",
+      "Test whether the shift is meaningfully larger than the natural noise in the data"]),
+    ("Inform the post-COVID baseline used for Recovery Model performance measurement",
+     ["The baseline before the pandemic is materially different from the baseline after",
+      "Any performance framing needs to be explicit about which baseline it compares to"]),
+    ("Demonstrate an analytical approach the Ministry's Business Intelligence team could apply to other indicators",
+     ["The same method applies to hospitalization, emergency department, and EMS data",
+      "Same data source, same code structure, different outcome variable"]),
+], size=15, sub_size=12)
 
 footer_left(s, FOOTER)
 page_num(s, 3)
 
 # ===========================================================================
-# Slide 4 - Approach
-#   "An interrupted time series compares the pre-COVID and post-COVID periods statistically"
+# Slide 4 - Background
 # ===========================================================================
 s = prs.slides.add_slide(blank)
-title(s, "An interrupted time series compares the pre-COVID and post-COVID periods statistically")
+title(s, "Background")
 hline(s)
 
-bullets(s, 0.7, 1.7, 12, 5.0, [
-    ("Method: interrupted time series (also called segmented regression)",
-     ["Fits one trend to the pre-COVID years, another to the post-COVID years",
-      "Measures the gap between them at the cutoff (2020 Q2, first full quarter under the emergency)",
-      "Tests whether that gap is meaningfully larger than the natural noise in the data"]),
-    ("Data",
-     ["Opioid deaths: Public Health Agency of Canada Health Infobase, Alberta quarterly, 2016 Q1 to 2025 Q3",
-      "Population: Statistics Canada Table 17-10-0009-01, used to convert counts to a rate per 100,000",
-      "No internal Government of Alberta data is used; all sources are public"]),
-    ("Robustness checks confirm the result is not an artifact of method choices",
-     ["Placebo cutoffs placed in the pre-period (should produce no jump if the design is credible)",
-      "Drop the quarter that straddles the cutoff and refit",
-      "Cross-check using a count model with a population offset"]),
+bullets(s, 0.7, 1.5, 12, 5.0, [
+    ("COVID-19 pandemic context",
+     ["WHO characterized COVID-19 as a pandemic on 11 March 2020",
+      "Alberta declared a provincial public health emergency on 17 March 2020",
+      "Approximately 60,000 Canadians have died from the virus directly through 2024"]),
+    ("Beyond the virus itself, the pandemic disrupted several systems at once",
+     ["Drug supply chains for the unregulated drug market",
+      "Harm reduction service delivery (in-person service capacity, hours, access)",
+      "Mental health and addiction service delivery (in-person care disruption)",
+      "Employment, housing, and social connection"]),
+    ("Other provinces reported a substantial increase in opioid mortality starting 2020 Q2",
+     ["British Columbia: quarterly opioid deaths roughly doubled (2019 average vs 2020 Q2 to 2021 Q1)",
+      "Ontario: quarterly opioid deaths rose by roughly 75 per cent over the same comparison",
+      "Federal data (PHAC) confirms a Canada-wide pattern at the same cutoff"]),
 ], size=14, sub_size=12)
 
 footer_left(s, FOOTER)
 page_num(s, 4)
 
 # ===========================================================================
-# Slide 5 - Findings (with chart)
-#   "The death rate roughly doubled at 2020 Q2, sharp, large, and robust"
+# Slide 5 - Approach
 # ===========================================================================
 s = prs.slides.add_slide(blank)
-title(s, "The death rate roughly doubled at 2020 Q2, sharp, large, and robust")
+title(s, "Approach")
+hline(s)
+
+bullets(s, 0.7, 1.5, 12, 5.0, [
+    ("Method: interrupted time series (segmented regression)",
+     ["Fits one trend to the pre-COVID years, another to the post-COVID years",
+      "Measures the gap between them at the cutoff (2020 Q2, first full quarter under the emergency)",
+      "Tests whether that gap is meaningfully larger than the natural noise in the data"]),
+    ("Data",
+     ["Opioid deaths: Public Health Agency of Canada, Health Infobase, Alberta quarterly, 2016 Q1 to 2025 Q3",
+      "Population: Statistics Canada Table 17-10-0009-01, used to convert counts to a rate per 100,000",
+      "No internal Government of Alberta data is used; all sources are public"]),
+    ("Robustness checks confirm the result is not an artefact of method choices",
+     ["Placebo cutoffs placed in the pre-period (should produce no jump if the design is credible)",
+      "Drop the quarter that straddles the cutoff and refit",
+      "Cross-check using a count model with a population offset"]),
+], size=14, sub_size=12)
+
+footer_left(s, FOOTER)
+page_num(s, 5)
+
+# ===========================================================================
+# Slide 6 - Findings
+# ===========================================================================
+s = prs.slides.add_slide(blank)
+title(s, "Findings")
 hline(s)
 
 if os.path.exists(CHART):
-    s.shapes.add_picture(CHART, Inches(0.5), Inches(1.65), width=Inches(8.4))
+    s.shapes.add_picture(CHART, Inches(0.5), Inches(1.25), width=Inches(8.4))
 
-bullets(s, 9.2, 1.7, 4.0, 5.0, [
+bullets(s, 9.2, 1.4, 4.0, 5.5, [
     ("Pre-COVID average",
      ["About 4 deaths per 100,000 per quarter"]),
     ("Post-COVID average",
      ["About 8 deaths per 100,000 per quarter"]),
     ("Level shift at the cutoff",
      ["About 5.5 per 100,000 per quarter",
-      "Roughly a doubling",
+      "Roughly a doubling of the rate",
       "Statistically very strong (p < 0.001)"]),
     ("Pre-COVID trend was flat",
      ["The jump is not part of an existing rise"]),
@@ -255,55 +275,54 @@ bullets(s, 9.2, 1.7, 4.0, 5.0, [
 ], size=12, sub_size=10)
 
 footer_left(s, FOOTER)
-page_num(s, 5)
-
-# ===========================================================================
-# Slide 6 - Interpretation
-#   "The pandemic as a whole shifted opioid mortality, not the virus alone"
-# ===========================================================================
-s = prs.slides.add_slide(blank)
-title(s, "The pandemic as a whole shifted opioid mortality, not the virus alone")
-hline(s)
-
-bullets(s, 0.7, 1.7, 12, 5.0, [
-    ("The total effect attributable to the pandemic, including its downstream consequences",
-     ["Virus, public health measures, drug supply disruption, harm reduction capacity, mental health service disruption, isolation, economic shock",
-      "These came together by construction, not by coincidence; a pandemic without them is not a counterfactual that exists in any data"]),
-    ("The analysis cannot separate which channel did the most damage",
-     ["Decomposing into supply vs. services vs. isolation vs. economic shock requires different data",
-      "Drug-checking composition, service utilization series, and similar mechanism-level sources"]),
-    ("Comparing Alberta to other provinces would not isolate a virus-only effect",
-     ["Every Canadian province faced COVID and its policy response at essentially the same time",
-      "A peer comparison would identify Alberta-specific deviation from the common pattern, not the virus channel alone"]),
-], size=14, sub_size=12)
-
-footer_left(s, FOOTER)
 page_num(s, 6)
 
 # ===========================================================================
-# Slide 7 - Implications
-#   "Post-COVID baseline is higher than pre-COVID, and recovery is already underway"
+# Slide 7 - What This Means
 # ===========================================================================
 s = prs.slides.add_slide(blank)
-title(s, "Post-COVID baseline is higher than pre-COVID, and recovery is already underway")
+title(s, "What This Means")
 hline(s)
 
-bullets(s, 0.7, 1.7, 12, 5.0, [
+bullets(s, 0.7, 1.5, 12, 5.0, [
+    ("The analysis identifies the total effect of the COVID-19 pandemic on Alberta opioid mortality",
+     ["This includes the virus, the public health response, drug supply chain disruption, harm reduction service impacts, mental health service impacts, isolation, and the economic shock",
+      "These are downstream consequences of the pandemic, not independent causes"]),
+    ("The analysis does NOT separate the virus from everything else the pandemic brought together",
+     ["What share came from supply versus services versus isolation versus economic shock is a separate, mechanism-level question",
+      "Comparing Alberta to other provinces would not solve this, because all provinces faced COVID and its policy response at the same time"]),
     ("For Recovery Model performance measurement, the baseline matters",
      ["The post-COVID baseline is roughly double the pre-COVID baseline",
-      "Any 'return to baseline' framing needs to be explicit about which baseline"]),
-    ("The trajectory is not flat: a real recovery is already visible",
-     ["The post-COVID period peaked in 2021 Q4 and has been declining since 2024",
-      "A single average over the post-period masks this dynamic"]),
-    ("The next analytical work is decomposition, not better identification",
-     ["Which channel drove most of the shift (supply, services, isolation, economic)",
-      "Which age groups, geographic zones, and substance types concentrate the increase",
-      "Modelling the rise-to-peak-and-decline shape directly, rather than a single level shift",
-      "Cumulative excess deaths through end-of-sample as a policy-relevant total"]),
+      "Any 'return to baseline' framing needs to be explicit about which baseline",
+      "The post-COVID trajectory is already declining since 2024, suggesting a real recovery is underway"]),
 ], size=14, sub_size=12)
 
 footer_left(s, FOOTER)
 page_num(s, 7)
+
+# ===========================================================================
+# Slide 8 - Limitations and Next Steps
+# ===========================================================================
+s = prs.slides.add_slide(blank)
+title(s, "Limitations and Next Steps")
+hline(s)
+
+bullets(s, 0.7, 1.5, 12, 5.0, [
+    ("Limitations",
+     ["Single province, single outcome (opioid deaths) - no decomposition by substance type, age, sex, or zone",
+      "Quarterly data is small for inference (39 observations); reliance on robustness checks rather than asymptotic theory alone",
+      "Reporting lag and revisions: the most recent quarters may move as data is updated"]),
+    ("Realistic next analytical work",
+     ["Mechanism decomposition: bring in supply-side, service-capacity, and outcome data to attribute share to each channel",
+      "Heterogeneity: by age, sex, zone, and substance type (fentanyl, carfentanil, other)",
+      "Post-period dynamics: model the rise-to-peak-and-decline shape directly",
+      "Cumulative excess deaths through end-of-sample as a policy-relevant total"]),
+    ("Code, data, and full documentation",
+     ["github.com/Adilbek123/alberta-substance-use-trends"]),
+], size=14, sub_size=12)
+
+footer_left(s, FOOTER)
+page_num(s, 8)
 
 prs.save(OUT)
 print(f"Saved: {OUT}")
