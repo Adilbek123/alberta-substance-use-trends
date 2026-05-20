@@ -1,0 +1,18 @@
+Alberta opioid deaths RDiT results — run 2026-05-20
+============================================================
+
+Quarters in sample: 39 (2016 Q1 – 2025 Q3)
+Cutoff: 2020 Q2
+
+Main specification (full sample, HAC SE 4-lag):
+  jump at cutoff: +235.3 deaths/quarter
+  95% CI:         [+164.7, +306.0]
+  p-value:        0.0000
+
+Donut robustness (drop 2020 Q1):
+  jump at cutoff: +230.4
+  95% CI:         [+163.3, +297.5]
+
+Pre-COVID mean:   173 deaths/quarter
+Post-COVID mean:  369 deaths/quarter
+Difference:       +196
