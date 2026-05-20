@@ -1,12 +1,13 @@
-# Alberta opioid mortality and COVID-19: regression discontinuity in time
+# Alberta opioid mortality and COVID-19: interrupted time series
 
-A short personal analysis of how Alberta's opioid death rate shifted around
-the COVID-19 onset, using federal data and a regression discontinuity in
-time (RDiT) specification.
+Short personal analysis of how Alberta's opioid death rate shifted around the
+COVID-19 onset, using federal data and an interrupted time series (ITS)
+specification with quarter fixed effects, placebo cutoffs, and a negative
+binomial cross-check.
 
 This is a learning project I built in an afternoon to refresh my hands-on
-work with time-series policy data. It is not affiliated with my employer
-and does not use any internal data.
+work with time-series policy data. It is not affiliated with my employer and
+does not use any internal data.
 
 ## Question
 
@@ -15,76 +16,119 @@ trend can explain, starting from 2020 Q2?
 
 ## Data
 
-Public Health Agency of Canada, Health Infobase, Substance-Related Harms
-Data (`SubstanceHarmsData.csv`). Downloaded 2026-05-20 from
-[health-infobase.canada.ca](https://health-infobase.canada.ca/substance-related-harms/opioids-stimulants/).
+- **Outcome:** Public Health Agency of Canada, Health Infobase, Substance-
+  Related Harms Data ([health-infobase.canada.ca](https://health-infobase.canada.ca/substance-related-harms/opioids-stimulants/)).
+  Downloaded 2026-05-20. I use Alberta, opioids, deaths, quarterly counts,
+  overall (no demographic disaggregation). 39 quarters: 2016 Q1 – 2025 Q3.
+- **Denominator:** Statistics Canada Table 17-10-0009-01, quarterly
+  population estimates by province.
 
-I use a single slice: Alberta, opioids, deaths, quarterly counts,
-overall (no demographic disaggregation). 39 quarters, 2016 Q1 to 2025 Q3.
-
-The full raw file is included under `data/` for reproducibility.
+Both raw files are included under `data/` for reproducibility.
 
 ## Method
 
-Regression discontinuity in time around the 2020 Q2 cutoff:
+This is an **interrupted time series with a level and slope change**
+(segmented regression). When time is the running variable this is sometimes
+called regression discontinuity in time (Hausman and Rapson 2018), but I do
+not invoke RD-style local-randomization arguments. Identification rests on a
+correctly specified counterfactual trend, not on continuity of potential
+outcomes at the cutoff.
+
+Outcome is modelled as **deaths per 100,000 Alberta residents** to net out
+population growth over the 10-year window (Alberta grew ~4.4M → 4.9M).
 
 ```
-deaths_t  =  α  +  β1·(t − cutoff)  +  β2·post  +  β3·(t − cutoff)·post  +  ε
+rate_t  =  α  +  β1·(t − cutoff)  +  β2·post  +  β3·(t − cutoff)·post  +  γ·Quarter_FE  +  ε
 ```
 
-- `post = 1` if `t ≥ 2020 Q2`, else `0`.
-- `cutoff = 2020 Q2` (first full quarter under the public health emergency
-  declared 2020-03-17).
-- HAC standard errors (Newey-West, 4-quarter lag) to handle autocorrelation.
-- Robustness: I also re-fit dropping 2020 Q1 (the transitional quarter that
-  straddles the cutoff) — a "donut" specification.
+- `cutoff = 2020 Q2` — first full quarter under Alberta's public health
+  emergency (declared 2020-03-17).
+- `Quarter_FE` — quarter-of-year dummies (Q4 reference) to absorb
+  seasonality.
+- Newey-West HAC standard errors with small-sample correction; 3-lag is
+  the data-driven choice for quarterly data with this T, sensitivity at
+  1 / 2 / 3 / 4 / 6 lags is reported below.
 
-`β2` is the discontinuity at the cutoff, i.e. the level shift in opioid
-deaths attributable to the pre/post change after accounting for the existing
-trend.
+`β2` is the immediate level shift at the cutoff, conditional on the linear
+post-trend and quarterly seasonality.
 
 ## Findings
 
+Main specification (rate per 100k per quarter, segmented regression with
+quarter FE, HAC SE 3-lag, small-sample correction):
+
 | Quantity | Estimate |
 | --- | --- |
-| Pre-COVID mean (2016 Q1 – 2020 Q1) | 173 deaths / quarter |
-| Post-COVID mean (2020 Q2 onward) | 369 deaths / quarter |
-| Jump at cutoff (main spec, HAC SE) | **+235 deaths / quarter** [95% CI +165, +306], p < 0.001 |
-| Jump at cutoff (donut spec, drop 2020 Q1) | +230 [95% CI +163, +298] |
-| Pre-COVID slope | +2.3 deaths / quarter (not significant, p = 0.76) |
+| Level shift at 2020 Q2 cutoff | **+5.50 deaths per 100k per quarter** [95% CI +3.60, +7.39], p < 0.001 |
+| At mean AB population (4.48M) this is | ≈ +246 deaths per quarter [+162, +331] |
+| Pre-COVID slope | −0.02 per 100k per quarter (p = 0.94, flat) |
+| Pre-COVID mean rate (2016 Q1 – 2020 Q1) | 4.05 per 100k per quarter |
+| Post-COVID mean rate (2020 Q2 onward) | 7.99 per 100k per quarter |
 
-The pre-COVID period is roughly flat, so the jump is not part of an
-existing trend. The donut robustness check moves the estimate by less than
-2%.
+The pre-COVID period is flat, so the jump is not part of an existing trend.
 
-The post-cutoff period also looks like it peaked in 2021 Q4 and has been
-trending down since 2024. The RDiT here measures the level shift at the
-cutoff, not the longer dynamics.
+![ITS chart](output/rdit_opioid_deaths.png)
 
-![RDiT chart](output/rdit_opioid_deaths.png)
+### Robustness
 
-## Limitations (important)
+**HAC lag sensitivity.** Estimate is constant at +5.50 across maxlags
+{1, 2, 3, 4, 6}; SE varies in a narrow band (0.79–0.98). Inference does not
+hinge on the lag choice.
 
-- **Not a causal identification of COVID-19 itself.** RDiT requires that no
-  other major changes happened sharply at the same cutoff that affected
-  the outcome through other channels. In March 2020 many things moved at
-  once: supply chains for unregulated drugs, harm-reduction service
-  availability, employment, housing, and mental health service capacity.
-  The estimate captures the bundled effect of "the world before March 2020
-  vs after," not a clean COVID-only effect.
-- **Single cutoff, no donor pool.** A stronger design would use other
+**Donut (drop transitional 2020 Q1).** Jump = +5.34 [95% CI +3.52, +7.16].
+Estimate moves <3%.
+
+**Placebo cutoffs** (re-fit using only 2016 Q1 – 2020 Q1 data, with fake
+cutoffs in the pre-period):
+
+| Fake cutoff | Estimated "jump" |
+| --- | --- |
+| 2018 Q1 | −0.07 |
+| 2018 Q2 | −0.19 |
+| 2018 Q3 | −0.44 |
+| 2018 Q4 | −0.95 |
+| 2019 Q1 | −1.30 |
+| 2019 Q2 | −1.14 |
+| 2019 Q3 | −1.86 |
+| **2020 Q2 (real)** | **+5.50** |
+
+The largest absolute placebo jump (1.86) is roughly **one third** the real
+estimate, and all placebos point in the opposite direction (mild
+*decreases* in the pre-period). The real cutoff is well outside the placebo
+distribution.
+
+**Negative binomial cross-check.** GLM with log-population offset and
+quarter FE produces a post-cutoff rate ratio of **2.43** (95% CI 1.80, 3.26),
+i.e. the post-cutoff rate is roughly 2.4× the pre-cutoff rate at the cutoff.
+This is consistent with the linear-rate result and confirms the conclusion
+does not depend on the OLS/Gaussian assumption.
+
+## Limitations
+
+- **Not a causal identification of COVID-19 itself.** Many things shifted in
+  March 2020: supply chains for the unregulated drug supply, harm-reduction
+  service availability, employment, housing, and mental-health service
+  capacity. The estimate captures the bundled effect of "the world before
+  March 2020 vs after," not a clean COVID-only channel.
+- **Single province, no donor pool.** A stronger design would use other
   provinces with different pandemic-response timing as comparators
-  (difference-in-discontinuities), or a synthetic control. I did not build
-  that here.
+  (difference-in-discontinuities) or a synthetic control.
 - **No demographic stratification.** Alberta-level totals mask substantial
   age, sex, and zone heterogeneity that any real Ministry analysis would
   surface.
-- **No fentanyl decomposition.** A natural follow-up is to break the post-
-  COVID jump into the share driven by composition change in the unregulated
-  supply (fentanyl share, carfentanil emergence) vs uptake of
-  pharmaceutical opioids.
-- **Reporting lag and revisions.** Health Infobase notes the data is
-  subject to revision; the most recent quarters may move.
+- **No substance decomposition.** The headline number bundles fentanyl,
+  carfentanil, and other opioids. A follow-up could separate composition
+  change in the unregulated supply from uptake of pharmaceutical opioids.
+- **Post-period is non-monotonic.** The post-cutoff series peaked in 2021 Q4
+  and has been declining since 2024. `β2` measures the immediate level shift
+  at the cutoff conditional on a linear post-trend; it is not the average
+  treatment effect over the post-period.
+- **Reporting lag and revisions.** Health Infobase notes the data is subject
+  to revision; the most recent quarters may move.
+- **Small sample for HAC asymptotics.** n = 39 is at the lower end of where
+  Newey-West asymptotics are reasonable. Wild-cluster bootstrap or
+  randomization inference from the placebo distribution would be a tighter
+  inference procedure; the placebo results above are a partial substitute.
 
 ## What I would do next
 
@@ -96,19 +140,21 @@ cutoff, not the longer dynamics.
 3. Add EMS responses and ED visits as parallel outcomes — these have
    different reporting lag and different selection into the data, and
    triangulating across them strengthens the inference.
-4. Stratify by age and sex to identify which cohorts drove the post-COVID
+4. Stratify by age and sex to identify which cohorts drove the post-cutoff
    level shift.
+5. Report cumulative excess deaths through end-of-sample as a policy-
+   relevant quantity alongside the immediate level shift.
 
 ## Reproducing
 
 ```
-pip install pandas statsmodels matplotlib numpy
-python analysis.py
+pip install -r requirements.txt
+python3 analysis.py
 ```
 
 Output goes to `output/rdit_opioid_deaths.png` and `output/results.txt`.
 
 ## License
 
-Code: MIT. Data: redistributed under the Public Health Agency of Canada's
-open data terms.
+Code: MIT. Data: redistributed under the originating agencies' open data
+terms (PHAC Health Infobase, Statistics Canada).

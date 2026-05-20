@@ -1,18 +1,44 @@
-Alberta opioid deaths RDiT results — run 2026-05-20
-============================================================
+Alberta opioid deaths — segmented regression / ITS results
+Run date: 2026-05-20
+================================================================
 
-Quarters in sample: 39 (2016 Q1 – 2025 Q3)
+Sample: 39 quarters (2016 Q1 – 2025 Q3)
 Cutoff: 2020 Q2
+Outcome: opioid deaths per 100,000 Alberta residents per quarter
 
-Main specification (full sample, HAC SE 4-lag):
-  jump at cutoff: +235.3 deaths/quarter
-  95% CI:         [+164.7, +306.0]
-  p-value:        0.0000
+Main spec (rate per 100k, segmented regression with quarter FE,
+  HAC SE 3-lag, small-sample correction):
+  level shift (post): +5.50 per 100k
+  95% CI:             [+3.60, +7.39]
+  p-value:            0.0000
+  pre-COVID slope:    -0.016 per 100k/quarter (p = 0.937)
+  At mean AB pop (4,482,696) this is ~+246 deaths/quarter
 
-Donut robustness (drop 2020 Q1):
-  jump at cutoff: +230.4
-  95% CI:         [+163.3, +297.5]
+HAC lag sensitivity:
+  maxlags=1: jump=+5.50, SE=0.94, 95% CI [+3.65, +7.35], p=0.0000
+  maxlags=2: jump=+5.50, SE=0.98, 95% CI [+3.58, +7.41], p=0.0000
+  maxlags=3: jump=+5.50, SE=0.97, 95% CI [+3.60, +7.39], p=0.0000
+  maxlags=4: jump=+5.50, SE=0.93, 95% CI [+3.68, +7.31], p=0.0000
+  maxlags=6: jump=+5.50, SE=0.79, 95% CI [+3.94, +7.05], p=0.0000
 
-Pre-COVID mean:   173 deaths/quarter
-Post-COVID mean:  369 deaths/quarter
-Difference:       +196
+Donut robustness (drop transitional 2020 Q1):
+  jump: +5.34  [95% CI +3.52, +7.16]
+
+Placebo cutoffs (fit using only 2016 Q1 – 2020 Q1 data):
+  2018 Q1: jump=-0.065 per 100k, p=0.863
+  2018 Q2: jump=-0.189 per 100k, p=0.344
+  2018 Q3: jump=-0.440 per 100k, p=0.083
+  2018 Q4: jump=-0.953 per 100k, p=0.000
+  2019 Q1: jump=-1.300 per 100k, p=0.000
+  2019 Q2: jump=-1.136 per 100k, p=0.036
+  2019 Q3: jump=-1.855 per 100k, p=0.000
+  Real cutoff (2020 Q2):   jump=+5.50 per 100k, p=0.0000
+  Largest placebo |jump|:  1.855
+
+Negative binomial cross-check (counts, log-pop offset, quarter FE):
+  post coef (log rate ratio): 0.8858
+  rate ratio: 2.425 (95% CI [1.802, 3.264])
+  → post-cutoff rate is +142.5% of pre-cutoff at cutoff
+
+Pre-COVID mean rate:  4.05 per 100k/quarter
+Post-COVID mean rate: 7.99 per 100k/quarter
