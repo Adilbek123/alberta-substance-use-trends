@@ -4,7 +4,9 @@
 
 ## Background
 
-The World Health Organization characterized COVID-19 as a pandemic on 11 March 2020. Alberta declared a provincial public health emergency on 17 March 2020. Approximately 60,000 Canadians have died from the virus directly through 2024. Beyond the virus itself, the pandemic disrupted several systems at once: drug supply chains for the unregulated drug market, harm reduction service delivery, mental health and addiction service capacity, and employment, housing, and social connection. Other Canadian provinces reported substantial increases in opioid mortality starting 2020 Q2: federal data shows British Columbia roughly doubled and Ontario rose about 75 percent (2019 average compared with 2020 Q2 to 2021 Q1).
+Alberta has been responding to an opioid crisis since the mid-2010s, when fentanyl emerged in the unregulated drug supply and largely replaced earlier prescription-opioid harms. In 2016 the province recorded 611 apparent opioid-related deaths. In May 2017 the provincial government established a Minister's Opioid Emergency Response Commission under the Public Health Act. By the second half of the decade Alberta's opioid mortality had stabilised at a high level: the quarterly opioid death rate sat around 4 per 100,000 residents from 2016 through early 2020 (roughly 170-200 deaths per quarter), with no sustained upward or downward trend over that four-year period. This is the pre-COVID baseline used in this analysis.
+
+In March 2020 the COVID-19 pandemic intersected with the existing opioid crisis. The World Health Organization characterized COVID-19 as a pandemic on 11 March 2020; Alberta declared a provincial public health emergency on 17 March 2020. Federal data shows opioid mortality rose sharply across Canada from 2020 onward. The size and timing of Alberta's specific shift have not been quantified at this resolution in publicly available analysis.
 
 ## Question
 

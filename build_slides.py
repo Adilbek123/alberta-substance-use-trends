@@ -204,19 +204,18 @@ title(s, "Background")
 hline(s)
 
 bullets(s, 0.7, 1.5, 12, 5.0, [
-    ("COVID-19 pandemic context",
+    ("Alberta has been responding to an opioid crisis since the mid-2010s",
+     ["Fentanyl emerged in Alberta's unregulated drug supply through 2014-2016, replacing earlier prescription-opioid harms",
+      "In 2016 Alberta recorded 611 apparent opioid-related deaths",
+      "In May 2017 the province established a Minister's Opioid Emergency Response Commission under the Public Health Act"]),
+    ("By 2016-2019, Alberta's opioid mortality had stabilised at a high level",
+     ["Quarterly opioid death rate sat around 4 per 100,000 residents from 2016 through early 2020",
+      "Roughly 170-200 deaths per quarter, with no sustained upward or downward trend over the four-year period",
+      "This is the pre-COVID baseline used in this analysis"]),
+    ("In March 2020 the COVID-19 pandemic intersected with the existing opioid crisis",
      ["WHO characterized COVID-19 as a pandemic on 11 March 2020",
       "Alberta declared a provincial public health emergency on 17 March 2020",
-      "Approximately 60,000 Canadians have died from the virus directly through 2024"]),
-    ("Beyond the virus itself, the pandemic disrupted several systems at once",
-     ["Drug supply chains for the unregulated drug market",
-      "Harm reduction service delivery (in-person service capacity, hours, access)",
-      "Mental health and addiction service delivery (in-person care disruption)",
-      "Employment, housing, and social connection"]),
-    ("Other provinces reported a substantial increase in opioid mortality starting 2020 Q2",
-     ["British Columbia: quarterly opioid deaths roughly doubled (2019 average vs 2020 Q2 to 2021 Q1)",
-      "Ontario: quarterly opioid deaths rose by roughly 75 per cent over the same comparison",
-      "Federal data (PHAC) confirms a Canada-wide pattern at the same cutoff"]),
+      "Federal data shows opioid mortality rose sharply across Canada from 2020 onward; the size and timing of Alberta's shift have not been quantified at this resolution in public analysis"]),
 ], size=14, sub_size=12)
 
 footer_left(s, FOOTER)
